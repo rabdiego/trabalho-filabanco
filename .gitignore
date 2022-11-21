@@ -1,0 +1,6 @@
+# Compilados
+*.o
+main
+
+# Texto
+*.txt
