@@ -5,5 +5,5 @@
 | Autor | Github |
 | --- | --- |
 | Gabriel | [ArtroxGabriel](https://github.com/ArtroxGabriel) |
-| Diego | [nikrs14](https://github.com/niksr14) |
+| Diego | [nikrs14](https://github.com/nikrs14) |
 | Tobias | [Tobnobre](https://github.com/Tobnobre) |
