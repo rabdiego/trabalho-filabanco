@@ -51,59 +51,80 @@ void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
     }
 }
 
-float log_media_por_classe(Log **l, int classe) {
-    /**Descrição: Calcula a média de tempo de uma classe
+int log_obter_soma_por_classe(Log **l, int classe) {
+    /**Descrição: Retorna a soma do tempo de espera total de uma classe
      * Autor: Diego
      * 
-     * Args: [
-     *      l : Log *,
+     * Args : [
+     *      l : Log **,
+     *      classe : int
+     * ]
+     * 
+     * Returns: soma : int
+     * 
+    */
+    Log *esq, *dir;
+    int soma = 0;
+
+    esq = ((*l) == NULL) ? (NULL) : ((*l)->esq);
+    dir = ((*l) == NULL) ? (NULL) : ((*l)->dir);
+
+    if ((*l) != NULL) {
+        soma += log_obter_soma_por_classe(&esq, classe);
+        if ((*l)->classe == classe)
+            soma += (*l)->timer;
+        soma += log_obter_soma_por_classe(&dir, classe);
+    }
+
+    return soma;
+}
+
+int log_obter_contagem_por_classe(Log **l, int classe) {
+    /**Descrição: Retorna o total de clientes de uma classe
+     * Autor: Diego
+     * 
+     * Args : [
+     *      l : Log **,
+     *      classe : int
+     * ]
+     * 
+     * Returns: cont : int
+     * 
+    */
+    Log *esq, *dir;
+    int cont = 0;
+
+    esq = ((*l) == NULL) ? (NULL) : ((*l)->esq);
+    dir = ((*l) == NULL) ? (NULL) : ((*l)->dir);
+
+    if ((*l) != NULL) {
+        cont += log_obter_contagem_por_classe(&esq, classe);
+        if ((*l)->classe == classe)
+            cont++;
+        cont += log_obter_contagem_por_classe(&dir, classe);
+    }
+
+    return cont;
+}
+
+float log_media_por_classe(Log **l, int classe) {
+    /**Descrição: Retorna a média do tempo de espera total por cliente de uma classe
+     * Autor: Diego
+     * 
+     * Args : [
+     *      l : Log **,
      *      classe : int
      * ]
      * 
      * Returns: media : float
      * 
     */
-    Log *atual, *pre;
-    int total = 0, cont = 0;
+    int soma, contagem;
     float media;
-    
-    atual = ((*l) == NULL) ? (NULL) : ((*l));
-    
-    while (atual != NULL) {
-        if (atual->esq == NULL) {
-            cont++;
-            total += atual->timer;
-            atual = atual->esq;
-        } else {
-            pre = atual->esq;
-            while ((pre->dir != NULL) && (pre->dir != atual))
-                pre = pre->dir;
-            if (pre->dir == NULL) {
-                pre->dir = atual;
-                atual = atual->esq;
-            } else {
-                pre->dir = NULL;
-                cont++;
-                total += atual->timer;
-                atual = atual->dir;
-            }
-        }
-    }
-    
-    media = ((float) total)/((float) cont);
-    return media;
-}
 
-int log_obter_soma_por_classe(Log **l, int classe) {
-    /**Descrição: Retorna a soma do tempo de espera de uma classe
-     * Autor: Diego
-     * 
-     * Args : [
-     *      l : Log **,
-     *      classe : int     
-     * ]
-     * 
-     * Returns: soma : int
-     * 
-    */
+    soma = log_obter_soma_por_classe(l, classe);
+    contagem = log_obter_contagem_por_classe(l, classe);
+    media = ((float) soma)/((float) contagem);
+
+    return media;
 }
