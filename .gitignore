@@ -4,3 +4,6 @@ main
 
 # Texto
 *.txt
+
+# VSCode
+.vscode
