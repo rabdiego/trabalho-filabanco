@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "./logtree.h"
 
-Log **log_inicializar(Log **l) {
+void log_inicializar(Log **l) {
     /**Descrição: Inicializa um registrador
      * Autor: Diego
      * 
@@ -10,9 +10,7 @@ Log **log_inicializar(Log **l) {
      * Returns: None
      * 
     */
-    l = (Log **) malloc(sizeof(Log *));
     (*l) = NULL;
-    return l;
 }
 
 void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
@@ -53,7 +51,7 @@ void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
     }
 }
 
-float log_media_por_classe(Log *l, int classe) {
+float log_media_por_classe(Log **l, int classe) {
     /**Descrição: Calcula a média de tempo de uma classe
      * Autor: Diego
      * 
@@ -69,6 +67,10 @@ float log_media_por_classe(Log *l, int classe) {
     int count = 0;
     float media;
     
+    Log *temp_esq, *temp_dir;
+
+
+
     if (l != NULL) {
         log_media_por_classe(l->esq, classe);
         if (l->classe == classe) {
