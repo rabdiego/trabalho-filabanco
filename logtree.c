@@ -93,3 +93,17 @@ float log_media_por_classe(Log **l, int classe) {
     media = ((float) total)/((float) cont);
     return media;
 }
+
+int log_obter_soma_por_classe(Log **l, int classe) {
+    /**Descrição: Retorna a soma do tempo de espera de uma classe
+     * Autor: Diego
+     * 
+     * Args : [
+     *      l : Log **,
+     *      classe : int     
+     * ]
+     * 
+     * Returns: soma : int
+     * 
+    */
+}
