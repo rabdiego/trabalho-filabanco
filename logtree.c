@@ -63,23 +63,33 @@ float log_media_por_classe(Log **l, int classe) {
      * Returns: media : float
      * 
     */
-    int total = 0;
-    int count = 0;
+    Log *atual, *pre;
+    int total = 0, cont = 0;
     float media;
     
-    Log *temp_esq, *temp_dir;
-
-
-
-    if (l != NULL) {
-        log_media_por_classe(l->esq, classe);
-        if (l->classe == classe) {
-            total += l->timer;
-            count++;
+    atual = ((*l) == NULL) ? (NULL) : ((*l));
+    
+    while (atual != NULL) {
+        if (atual->esq == NULL) {
+            cont++;
+            total += atual->timer;
+            atual = atual->esq;
+        } else {
+            pre = atual->esq;
+            while ((pre->dir != NULL) && (pre->dir != atual))
+                pre = pre->dir;
+            if (pre->dir == NULL) {
+                pre->dir = atual;
+                atual = atual->esq;
+            } else {
+                pre->dir = NULL;
+                cont++;
+                total += atual->timer;
+                atual = atual->dir;
+            }
         }
-        log_media_por_classe(l->dir, classe);
     }
-
-    media = ((float) total)/((float) count);
+    
+    media = ((float) total)/((float) cont);
     return media;
 }
