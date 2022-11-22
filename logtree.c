@@ -54,15 +54,27 @@ void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
 }
 
 float log_media_por_classe(Log *l, int classe) {
+    /**Descrição: Calcula a média de tempo de uma classe
+     * Autor: Diego
+     * 
+     * Args: [
+     *      l : Log *,
+     *      classe : int
+     * ]
+     * 
+     * Returns: media : float
+     * 
+    */
     int total = 0;
     int count = 0;
     float media;
     
     if (l != NULL) {
         log_media_por_classe(l->esq, classe);
-        if (l->classe == classe)
+        if (l->classe == classe) {
             total += l->timer;
             count++;
+        }
         log_media_por_classe(l->dir, classe);
     }
 
