@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "./logtree.h"
 
-void log_inicializar(Log **l) {
+Log **log_inicializar(Log **l) {
     /**Descrição: Inicializa um registrador
      * Autor: Diego
      * 
@@ -11,17 +11,18 @@ void log_inicializar(Log **l) {
      * 
     */
     l = (Log **) malloc(sizeof(Log *));
-    *l = NULL;
+    (*l) = NULL;
+    return l;
 }
 
-void log_registrar(Log **l, int conta, int chave, int timer, int caixa) {
+void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
     /**Descrição: Registra um cliente no registrador
      * Autor: Diego
      * 
      * Args: [
      *      l : Log **,
      *      conta : int,
-     *      chave : int,
+     *      classe : int,
      *      timer : int,
      *      caixa : int
      * ]
@@ -29,22 +30,42 @@ void log_registrar(Log **l, int conta, int chave, int timer, int caixa) {
      * Returns: None
      * 
     */
-    Log _z = {conta, chave, timer, caixa, NULL, NULL, NULL};
-    Log *z = &_z;
+    Log *temp = (Log *)malloc(sizeof(Log));
+    temp->conta = conta;
+    temp->classe = classe;
+    temp->timer = timer;
+    temp->caixa = caixa;
+
     Log *y = NULL;
-    Log *x = *l;
+    Log *x = (*l);
 
     while (x != NULL) {
         y = x;
-        x = (z->timer < x->timer) ? x->esq : x->dir;
+        x = (temp->timer < x->timer) ? x->esq : x->dir;
     }
 
-    z->pai = y;
     if (y == NULL) {
-        *l = z;
-    } else if (z->timer < y->timer) {
-        y->esq = z;
+        (*l) = temp;
+    } else if (temp->timer < y->timer) {
+        y->esq = temp;
     } else {
-        y->dir = z;
+        y->dir = temp;
     }
+}
+
+float log_media_por_classe(Log *l, int classe) {
+    int total = 0;
+    int count = 0;
+    float media;
+    
+    if (l != NULL) {
+        log_media_por_classe(l->esq, classe);
+        if (l->classe == classe)
+            total += l->timer;
+            count++;
+        log_media_por_classe(l->dir, classe);
+    }
+
+    media = ((float) total)/((float) count);
+    return media;
 }
