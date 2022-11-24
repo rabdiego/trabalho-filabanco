@@ -12,6 +12,7 @@ void f_inicializar(Fila_FIFO **F){
     */
     (*F) = NULL;
 }
+
 int f_inserir(Fila_FIFO **F, int chave, int valor){
     /**Descrição: Registra um cliente no fila
      * Autor: Gabriel
@@ -44,6 +45,7 @@ int f_inserir(Fila_FIFO **F, int chave, int valor){
     }
     return 1;
 }
+
 int f_obter_proxima_chave(Fila_FIFO **F){
     /**Descrição: Obtem a proxima chave da fila e a remove após.
      * Autor: Gabriel
@@ -67,6 +69,7 @@ int f_obter_proxima_chave(Fila_FIFO **F){
     free(aux);
     return key;  
 }
+
 int f_consultar_proxima_chave(Fila_FIFO **F){
     /**Descrição: consulta o valor do nó cabeça
      * Autor: Gabriel
@@ -84,6 +87,7 @@ int f_consultar_proxima_chave(Fila_FIFO **F){
         return -1;
     return aux->chave;  
 }
+
 int f_consultar_proximo_valor(Fila_FIFO **F){
     /**Descrição: consulta o valor do nó cabe;a
      * Autor: Gabriel
@@ -101,6 +105,7 @@ int f_consultar_proximo_valor(Fila_FIFO **F){
         return -1;
     return aux->valor;  
 }
+
 int f_num_elementos(Fila_FIFO **F){
     /**Descrição: Retorna o numero de elementos na fila
      * Autor: Gabriel
@@ -120,6 +125,7 @@ int f_num_elementos(Fila_FIFO **F){
     }
     return num;
 }
+
 int f_consultar_chave_por_posicao (Fila_FIFO **F, int posicao){
     /**Descrição: Retorna a chave do posicao-ésimo elemento da fila.
      * Autor: Gabriel
@@ -142,6 +148,7 @@ int f_consultar_chave_por_posicao (Fila_FIFO **F, int posicao){
         aux = aux->prox;
     return aux->chave;
 }
+
 int f_consultar_valor_por_posicao (Fila_FIFO **F, int posicao){
     /**Descrição: Retorna a valor da chave do posicao-ésimo elemento da fila.
      * Autor: Gabriel
