@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "fila_fifo.h"
 
@@ -23,8 +22,8 @@ int f_inserir(Fila_FIFO **F, int chave, int valor){
      *      valor : int,
      * ]
      * 
-     * Returns: 0 - key duplication or insufficient memory
-     *          1 - insertion success.
+     * Returns: 0 : key duplication or insufficient memory
+     *          1 : insertion success.
      * 
     */
     Fila_FIFO *aux, *temp = (Fila_FIFO *) malloc(sizeof(Fila_FIFO));
@@ -53,8 +52,8 @@ int f_obter_proxima_chave(Fila_FIFO **F){
      *      F : Fila_FIFO **,
      * ]
      * 
-     * Returns: -1 empty queue
-     *          key's number of next element.
+     * Returns: -1  : empty queue
+     *          key : key's number of next element.
      * 
     */
     int key;
@@ -74,8 +73,8 @@ int f_consultar_proxima_chave(Fila_FIFO **F){
      * 
      * Args: F : Fila_FIFO **
      * 
-     * Returns: -1 - empty queue
-     *          key's number of next element
+     * Returns: -1         : empty queue
+     *          aux->chave : key's number of next element
      * 
     */  
     Fila_FIFO *aux;
@@ -91,8 +90,8 @@ int f_consultar_proxima_valor(Fila_FIFO **F){
      * 
      * Args: F : Fila_FIFO **
      * 
-     * Returns: -1 - empty queue
-     *          value of next element
+     * Returns: -1          : empty queue
+     *          aux->valor : value of next element
      * 
     */  
     Fila_FIFO *aux;
@@ -102,28 +101,66 @@ int f_consultar_proxima_valor(Fila_FIFO **F){
         return -1;
     return aux->valor;  
 }
-
-void print_fila(Fila_FIFO *F){
-    Fila_FIFO *aux = F;
-    while (aux != NULL)
-    {
-        printf("chave: %d\nvalor: %d\n", aux->chave, aux->valor);
+int f_num_elementos(Fila_FIFO **F){
+    /**Descrição: Retorna o numero de elementos na fila
+     * Autor: Gabriel
+     * 
+     * Args : [
+     *      F : Fila_FIFO **,
+     * ]
+     * 
+     * Returns: num : int
+     * 
+    */
+    int num = 0;
+    Fila_FIFO *aux = *F;
+    while(aux != NULL){
         aux = aux->prox;
+        num++;
     }
+    return num;
 }
+int f_consultar_chave_por_posicao (Fila_FIFO **F, int posicao){
+    /**Descrição: Retorna a chave do posicao-ésimo elemento da fila.
+     * Autor: Gabriel
+     * 
+     * Args : [
+     *      F : Fila_FIFO **,
+     *      posicao : int;
+     * ]
+     * 
+     * Returns: -1 : int
+     *          aux->chave : chave da posicao-ésimo
+     * 
+    */
+    int i;
+    Fila_FIFO *aux = *F;
 
-int main(){
-    Fila_FIFO *fila;
-    f_inicializar(&fila);
-    
-    for (int i = 1; i<3; i++){
-        if(f_inserir(&fila, i, 10+i)){
-        } else {
-            puts("repetido");
-            return EXIT_FAILURE;
-        }
-    }
-    print_fila(fila);
-    printf("\n%d\n\n", f_consultar_proxima_valor(&fila));
-    return EXIT_SUCCESS;
+    if (posicao > f_num_elementos(F))
+        return -1;
+    for(i = 0; i<(posicao-1); i++)
+        aux = aux->prox;
+    return aux->chave;
+}
+int f_consultar_valor_por_posicao (Fila_FIFO **F, int posicao){
+    /**Descrição: Retorna a valor da chave do posicao-ésimo elemento da fila.
+     * Autor: Gabriel
+     * 
+     * Args : [
+     *      F : Fila_FIFO **,
+     *      posicao : int;
+     * ]
+     * 
+     * Returns: -1 : int
+     *          aux->valor : valor da chave do posicao-ésimo
+     * 
+    */
+    int i;
+    Fila_FIFO *aux = *F;
+
+    if (posicao > f_num_elementos(F))
+        return -1;
+    for(i = 0; i<(posicao-1); i++)
+        aux = aux->prox;
+    return aux->valor;
 }
