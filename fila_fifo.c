@@ -84,7 +84,7 @@ int f_consultar_proxima_chave(Fila_FIFO **F){
         return -1;
     return aux->chave;  
 }
-int f_consultar_proxima_valor(Fila_FIFO **F){
+int f_consultar_proximo_valor(Fila_FIFO **F){
     /**Descrição: consulta o valor do nó cabe;a
      * Autor: Gabriel
      * 
