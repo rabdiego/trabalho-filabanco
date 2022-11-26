@@ -1,3 +1,5 @@
+#include "fila_fifo.h"
+
 #ifndef escalonador_h
 #define escalonador_h
 
@@ -9,11 +11,11 @@ typedef struct _escalonador {
     int n_3;
     int n_4;
     int n_5;
-    int num_conta;
-    int qtde_operacoes;
-    char *nome_arq_conf;
-    char *nome_arq_in;
-    char *nome_arq_out;
+    Fila_FIFO *fila_1;
+    Fila_FIFO *fila_2;
+    Fila_FIFO *fila_3;
+    Fila_FIFO *fila_4;
+    Fila_FIFO *fila_5;
 } Escalonador;
 
 void e_inicializar (Escalonador *, int, int, int, int, int, int, int);
