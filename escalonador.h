@@ -1,7 +1,20 @@
 #ifndef escalonador_h
 #define escalonador_h
 
-typedef struct _escalonador {} Escalonador;
+typedef struct _escalonador {
+    int caixas;
+    int delta_t;
+    int n_1;
+    int n_2;
+    int n_3;
+    int n_4;
+    int n_5;
+    int num_conta;
+    int qtde_operacoes;
+    char *nome_arq_conf;
+    char *nome_arq_in;
+    char *nome_arq_out;
+} Escalonador;
 
 void e_inicializar (Escalonador *, int, int, int, int, int, int, int);
 int e_inserir_por_fila (Escalonador *, int, int, int);
