@@ -3,6 +3,25 @@
 #include <stdlib.h>
 
 void e_inicializar (Escalonador *e, int caixas, int delta_t, int n_1, int n_2, int n_3, int n_4, int n_5){
+    /**Descrição: Inicializa o escalonador
+     * Autor: Diego
+     * 
+     * Args: [
+     *      e : Escalonador *,
+     *      caixas : int,
+     *      delta_t : int,
+     *      n_1 : int,
+     *      n_2 : int,
+     *      n_3 : int,
+     *      n_4 : int,
+     *      n_5 : int
+     * ]
+     * 
+     * Returns: None
+     * 
+    */
+    
+    
     e->caixas = caixas;
     e->delta_t = delta_t;
     e->n_1 = n_1;
