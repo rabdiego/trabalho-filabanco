@@ -7,3 +7,7 @@ main
 
 # VSCode
 .vscode
+
+# Utils
+utils
+*.py
