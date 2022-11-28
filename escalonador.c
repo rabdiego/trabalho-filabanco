@@ -40,7 +40,7 @@ void e_inicializar (Escalonador *e, int caixas, int delta_t, int n_1, int n_2, i
     f_inicializar(&(e->fila[4]));
     e->atual = 1;
     e->cont = n_1;
-};
+}
 
 int e_inserir_por_fila(Escalonador *e, int classe, int num_conta, int qtde_operacoes) {
     /**Descrição: Insere um cliente no escalonador
@@ -69,9 +69,7 @@ int e_obter_prox_num_conta(Escalonador *e) {
      * Returns: conta : int
      * 
     */
-    Fila_FIFO *f;
-    f = e->fila[e->atual -1]; // Atribuímos a fila atualmente cotada ("-1" p/correção de valores - f[0], ...) à fila f
-    int conta = f_obter_proxima_chave(&f); // Atribuímos o valor da conta do cidadão baseando-se na chave que ele recebeu
+    int conta = f_obter_proxima_chave(&(e->fila[e->atual -1])); // Atribuímos o valor da conta do cidadão baseando-se na chave que ele recebeu
     e->cont--; // Diminuímos o contador visto que f_obter_proxima_chave já removeu o cidadão
     if (e->cont == 0){ // Caso verdade, acabamos de retirar o último da fila, precisamos reinicializar o contador
         e->atual++; // Aumentamos a classe, visto que analisaremos outra fila
@@ -92,11 +90,9 @@ int e_consultar_prox_num_conta (Escalonador *e) {
      * Returns: conta : int
      * 
     */
-    Fila_FIFO *f;
-    f = e->fila[e->atual -1]; // Atribuímos a fila atualmente cotada ("-1" p/correção de valores - f[0], ...) à fila f
-    int conta = f_consultar_proxima_chave(&f); // Atribuímos o valor da conta do cidadão baseando-se na chave que ele recebeu
+    int conta = f_consultar_proxima_chave(&(e->fila[e->atual -1])); // Atribuímos o valor da conta do cidadão baseando-se na chave que ele recebeu
     return conta; // Retornamos a conta, cumprindo o dever de nossa função
-};
+}
 
 int e_consultar_prox_qtde_oper (Escalonador *e) {
     /** Descrição: Retorna a quantidade de operações bancárias que o próximo cliente das filas pretende realizar com o caixa, sem retirá-lo da sua respectiva fila
@@ -107,11 +103,9 @@ int e_consultar_prox_qtde_oper (Escalonador *e) {
      * Returns: operacoes : int
      * 
     */
-    Fila_FIFO *f;
-    f = e->fila[e->atual-1]; // Atribuímos a fila atualmente cotada ("-1" p/correção de valores - f[0], ...) à fila f
-    int operacoes = f_consultar_proximo_valor(&f); // Atribuímos o valor dentro do nó (quant. de operações) para o inteiro "operacoes"
+    int operacoes = f_consultar_proximo_valor(&(e->fila[e->atual-1])); // Atribuímos o valor dentro do nó (quant. de operações) para o inteiro "operacoes"
     return operacoes;
-};
+}
 
 int e_consultar_prox_fila (Escalonador *e) {
     /**Descrição: Retorna a próxima fila que será atendida de acordo com a Disciplina de Atendimento
@@ -124,7 +118,7 @@ int e_consultar_prox_fila (Escalonador *e) {
     */
     int f = e->atual; // Atribuímos o valor da fila atual sem correção de valores (sem considerar começo em f[0]), para obtermos já a resposta da fila acrescida em 1
     return f;
-};
+}
 
 int e_consultar_qtde_clientes (Escalonador *e) {
     /**Descrição: Retorna a quantidade total (soma) de clientes esperando atendimento em todas as filas
@@ -135,9 +129,12 @@ int e_consultar_qtde_clientes (Escalonador *e) {
      * Returns: qtde_clientes : int
      * 
     */
-    int qtde_clientes = e->num[0] + e->num[1] + e->num[2] + e->num[3] + e->num[4]; // Somamos a quantidade de clientes em todas as filas
+    int qtde_clientes = 0, i; 
+    for (i = 0; i < 5; i++) {
+        qtde_clientes += f_num_elementos(&(e->fila[i]));
+    } // Somamos a quantidade de clientes em todas as filas
     return qtde_clientes;
-};
+}
 
 int e_consultar_tempo_prox_cliente (Escalonador *e) {
     /**Descrição: Retorna o tempo necessário para que o próximo cliente a ser atendido realize todas as operações financeiras que deseja, sem retirá-lo da sua respectiva fila. Retornar -1 caso não tenha nenhum cliente em todas as filas.
@@ -148,12 +145,13 @@ int e_consultar_tempo_prox_cliente (Escalonador *e) {
      * Returns: timer : int
      * 
     */
-    if (e->cont == 0)  return -1;
-    else{ // Lembre: o timer é definido para chamar outro cliente dentro de M × delta_t min.
+    if (e->cont == 0) {
+        return -1;
+    } else { // Lembre: o timer é definido para chamar outro cliente dentro de M × delta_t min.
         int timer = (e->delta_t*e_consultar_prox_qtde_oper(e)); // Fazemos a operacao M*delta_t e atribuímos ao timer
         return timer; 
     }
-};
+}
 
 int e_conf_por_arquivo(Escalonador *e, char *nome_arq_conf) {
     /**Descrição: Lê um arquivo texto de configuração e atualiza os dados do escalonador

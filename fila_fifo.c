@@ -66,7 +66,6 @@ int f_obter_proxima_chave(Fila_FIFO **F){
         return -1;
     key = aux->chave;
     (*F) = (*F)->prox;
-    free(aux);
     return key;  
 }
 
