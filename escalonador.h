@@ -6,16 +6,10 @@
 typedef struct _escalonador {
     int caixas;
     int delta_t;
-    int n_1;
-    int n_2;
-    int n_3;
-    int n_4;
-    int n_5;
-    Fila_FIFO *fila_1;
-    Fila_FIFO *fila_2;
-    Fila_FIFO *fila_3;
-    Fila_FIFO *fila_4;
-    Fila_FIFO *fila_5;
+    int atual; //Indica a classe atual do contador 
+    int cont;
+    int num [5];
+    Fila_FIFO *fila[5];
 } Escalonador;
 
 void e_inicializar (Escalonador *, int, int, int, int, int, int, int);
