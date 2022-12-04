@@ -5,5 +5,6 @@
 #include "./escalonador.h"
 
 int main(int narg, char * argv[]) {
+    // teste
     return EXIT_SUCCESS;
 }
