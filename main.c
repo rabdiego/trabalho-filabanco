@@ -5,6 +5,7 @@
 #include "./escalonador.h"
 
 int main(int narg, char * argv[]) {
-    // teste
+    Escalonador *e;
+    e_rodar(e, "entrada-0001.txt", "saida-0001.txt");
     return EXIT_SUCCESS;
 }
