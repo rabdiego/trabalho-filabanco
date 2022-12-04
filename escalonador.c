@@ -1,5 +1,6 @@
 #include "escalonador.h"
 #include "fila_fifo.h"
+#include "logtree.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -202,4 +203,112 @@ int e_conf_por_arquivo(Escalonador *e, char *nome_arq_conf) {
         i++;
     }
     return 1;
+}
+
+void e_rodar(Escalonador *e, char *nome_arq_in, char *nome_arq_out) {
+    /**Descrição: Realiza a simulação e salva em um arquivo de saída
+     * Autor: Diego, Gabriel e Tobias
+     * 
+     * Args: [
+     *      e : Escalonador *,
+     *      nome_arq_in : char *,
+     *      nome_arq_out : char *
+     * ]
+     * 
+     * Returns: None
+     * 
+    */
+    Log *registrador;
+    FILE *arq_out;
+    int timer = 0, maior = 0;
+    int caixas[10], operacoes[5], valores[10];
+    int i, qtde_operacoes, conta, classe, check, atual;
+    float tempo_medias[5];
+
+    arq_out = fopen(nome_arq_out, "w");
+
+    e_conf_por_arquivo(e, nome_arq_in);
+    log_inicializar(&registrador);
+
+    check = e_consultar_prox_num_conta(e);
+
+    for (i = 0; i < e->caixas; i++) {
+        caixas[i] = 1;
+        valores[i] = 0;
+    }
+
+    for (i = 0; i < 5; i++) {
+        operacoes[i] = 0;
+    }
+
+    while (check != -1) {
+        for (i = 0; i < e->caixas; i++){
+            caixas[i] = caixas[i] - 1;
+            if (caixas[i] == 0){
+                classe = e->atual;
+                qtde_operacoes = e_consultar_prox_qtde_oper(e);
+                conta = e_obter_prox_num_conta(e);
+                if (conta == -1){
+                    conta = e_obter_prox_num_conta(e);
+                    classe = e->atual;
+                }
+                if (conta != -1 && conta != 0){
+                    operacoes[classe - 1] = operacoes[classe - 1] + qtde_operacoes;
+                    atual = i + 1;
+                    log_registrar(&registrador, conta, classe, timer, atual);
+                    switch (classe) {
+                        case 1:
+                            fprintf(arquivo_saida, "T = %d min: Caixa %d chama da categoria Premium cliente da conta %d para realizar %d operacao(oes).\n", timer, caixaAtual, conta, qtde_operacoes);
+                            break;
+                        case 2:
+                            fprintf(arquivo_saida, "T = %d min: Caixa %d chama da categoria Ouro cliente da conta %d para realizar %d operacao(oes).\n", timer, caixaAtual, conta, qtde_operacoes);
+                            break;
+                        case 3:
+                            fprintf(arquivo_saida, "T = %d min: Caixa %d chama da categoria Prata cliente da conta %d para realizar %d operacao(oes).\n", timer, caixaAtual, conta, qtde_operacoes);
+                            break;
+                        case 4:
+                            fprintf(arquivo_saida, "T = %d min: Caixa %d chama da categoria Bronze cliente da conta %d para realizar %d operacao(oes).\n", timer, caixaAtual, conta, qtde_operacoes);
+                            break;
+                        case 5:
+                            fprintf(arquivo_saida, "T = %d min: Caixa %d chama da categoria Comum cliente da conta %d para realizar %d operacao(oes).\n", timer, caixaAtual, conta, qtde_operacoes);
+                            break;
+                        default:
+                            break;
+                    }
+                    caixas[i] = qtde_operacoes*e->delta_t
+                    valores[i] = valores[i] + 1;
+                }
+            }
+            verificador = e_consultar_prox_num_conta(e);
+        }
+        timer++;
+    } timer--;
+
+    for (i = 0; i < e->caixas; i++) {
+        if (maior < caixas[i]) {
+            maior = caixas[i];
+        }
+    }
+
+    timer = timer + maior;
+
+    for (i = 0; i < 5; i++) {
+        tempo_medias[i] = ((float) operacoes[i])/((float) log_obter_contagem_por_classe(&registrador, i+1));
+    }
+
+    fprintf(arq_out, "Tempo total de atendimento: %d minutos.\n", timer);
+    fprintf(arq_out,"Tempo medio de espera dos %d clientes Premium: %.2f\n", log_obter_contagem_por_classe(&registrador, 1), log_media_por_classe(&registrador, 1));
+    fprintf(arq_out,"Tempo medio de espera dos %d clientes Ouro: %.2f\n", log_obter_contagem_por_classe(&registrador, 2), log_obter_media_por_classe(&registrador, 2));
+    fprintf(arq_out,"Tempo medio de espera dos %d clientes Prata: %.2f\n", log_obter_contagem_por_classe(&registrador, 3), log_obter_media_por_classe(&registrador, 3));
+    fprintf(arq_out,"Tempo medio de espera dos %d clientes Bronze: %.2f\n", log_obter_contagem_por_classe(&registrador, 4), log_obter_media_por_classe(&registrador, 4));
+    fprintf(arq_out,"Tempo medio de espera dos %d clientes Leezu: %.2f\n", log_obter_contagem_por_classe(&registrador, 5), log_obter_media_por_classe(&registrador, 5));    
+    fprintf(arq_out,"Quantidade media de operacoes por cliente Premium = %.2f\n", tempo_medias[0]);
+    fprintf(arq_out,"Quantidade media de operacoes por cliente Ouro = %.2f\n", tempo_medias[1]);
+    fprintf(arq_out,"Quantidade media de operacoes por cliente Prata = %.2f\n", tempo_medias[2]);
+    fprintf(arq_out,"Quantidade media de operacoes por cliente Bronze = %.2f\n", tempo_medias[3]);
+    fprintf(arq_out,"Quantidade media de operacoes por cliente Leezu = %.2f\n", tempo_medias[4]);
+
+    for (i = 0; i < e->caixas; i++){
+        fprintf(arq_out,"O caixa de número %d atendeu %d clientes.\n", i+1, valores[i]);
+    }
 }
