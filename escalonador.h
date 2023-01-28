@@ -14,6 +14,7 @@ typedef struct _escalonador {
 
 void e_inicializar (Escalonador *, int, int, int, int, int, int, int);
 int e_inserir_por_fila (Escalonador *, int, int, int);
+void _e_atualizar_atual(Escalonador *);
 int e_obter_prox_num_conta(Escalonador *);
 int e_consultar_prox_num_conta (Escalonador *);
 int e_consultar_prox_qtde_oper (Escalonador *);

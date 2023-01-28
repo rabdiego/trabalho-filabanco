@@ -34,9 +34,11 @@ void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
     temp->timer = timer;
     temp->caixa = caixa;
 
+    // Algoritmo de inclusão na ABB
     Log *y = NULL;
     Log *x = (*l);
 
+    // Percorrendo a árvore até o local correto
     while (x != NULL) {
         y = x;
         x = (temp->timer < x->timer) ? x->esq : x->dir;
@@ -50,6 +52,8 @@ void log_registrar(Log **l, int conta, int classe, int timer, int caixa) {
         y->dir = temp;
     }
 }
+
+// Próximas duas funções usam o algoritmo EM ORDEM da ABB
 
 int log_obter_soma_por_classe(Log **l, int classe) {
     /**Descrição: Retorna a soma do tempo de espera total de uma classe
@@ -122,6 +126,7 @@ float log_media_por_classe(Log **l, int classe) {
     int soma, contagem;
     float media;
 
+    // Média simples
     soma = log_obter_soma_por_classe(l, classe);
     contagem = log_obter_contagem_por_classe(l, classe);
     media = ((float) soma)/((float) contagem);
